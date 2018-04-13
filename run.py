@@ -24,9 +24,15 @@ def add_url():
     input_url = request.form['input_url']
     if input_url:
         logger.info('Params: {0}'.format(input_url))
-        short_url_hash = url_manager.insert_new_url(input_url)
-        return render_template('new_url_return.html', short_url_hash=short_url_hash)
-
+        short_url_hash = url_manager.new_url_handler(input_url)
+        if short_url_hash:
+            return render_template('new_url_return.html', short_url_hash=short_url_hash)
+        else:
+            return_line = '''
+            You entered an invalid url, please ensure you enter a FULL URL
+            Example: http://google.com
+            '''
+            return return_line
     else:
         return 'EMPTY REQUEST'
 

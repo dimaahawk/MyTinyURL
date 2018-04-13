@@ -65,28 +65,35 @@ def insert_new_row(sql_query):
     return True
 
 
+def is_url_valid(url):
+    if url.startswith('http://') or url.startswith('https://'):
+        return True
+    else:
+        return False
+
+
 def hash_new_url(url):
     url = url.strip()
     full_url_hash = hashlib.sha256(url).hexdigest()
     short_url_hash = full_url_hash[len(full_url_hash) - 10:]  # Get the last 10 characters from the hash
     return_tuple = (full_url_hash, short_url_hash, url)
+
     return return_tuple
 
 
-def insert_new_url(url):
-    insert_object = hash_new_url(url)
-    full_hash = insert_object[0]
-    short_hash = insert_object[1]
-    insert_url = insert_object[2]
-    query = url_shortener_queries.insert_new_url.format(full_hash, short_hash, insert_url)
-    insert_new_row(query)
-
-    return short_hash  # Pass back the short hash to give the user
+def new_url_handler(url):
+    if is_url_valid(url):
+        full_hash, short_hash, insert_url = hash_new_url(url)
+        query = url_shortener_queries.insert_new_url.format(full_hash, short_hash, insert_url)
+        insert_new_row(query)
+        return short_hash  # Pass back the short hash to give the user
+    else:
+        logger.info('INVALID URL: {0}'.format(url))
+        return False
 
 
 def return_url_from_short_hash(short_url_hash):
     query = url_shortener_queries.get_url.format(short_url_hash)
-    logger.info('Running Query for short code lookup: {0}'.format(query))
     query_results = return_query_results(query)
     logger.info('Query results: {0}'.format(query_results))
 
