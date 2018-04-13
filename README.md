@@ -4,16 +4,14 @@ Flask URL Shortener
 
 *DB Schema:*
 ```
-create database mytinyurl;
-use mytinyurl;
-drop table if exists url_map;
-create table url_map (
-  url_id int not null auto_increment,
-  full_url_hash varchar(255) not null,
-  short_url_hash varchar(255) not null,
-  url varchar(255) not null,
-  primary key (url_id)
-);
+CREATE TABLE `url_map` (
+  `url_id` int(11) NOT NULL AUTO_INCREMENT,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `full_url_hash` varchar(255) NOT NULL,
+  `short_url_hash` varchar(255) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  PRIMARY KEY (`url_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1
 ```
 
 
