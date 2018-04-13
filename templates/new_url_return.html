@@ -1,0 +1,25 @@
+<html lang="en">
+  <head>
+    <title>MyTinyURL</title>
+    <!-- Bootstrap core CSS -->
+    <!--<link href="static/css/bootstrap.min.css" rel="stylesheet">-->
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <script src="{{ url_for('static', filename='css/signin.css') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        console.log('Document Ready')
+      });
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-signin">
+        <h3>http://s.billben.net/s/{{ short_url_hash }}</h3>
+      </div>
+    </div> <!-- /container -->
+  </body>
+  <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+</html>

@@ -24,8 +24,9 @@ def add_url():
     input_url = request.form['input_url']
     if input_url:
         logger.info('Params: {0}'.format(input_url))
-        response_short_hash = url_manager.insert_new_url(input_url)
-        return 'Your url code is: {0}'.format(response_short_hash)
+        short_url_hash = url_manager.insert_new_url(input_url)
+        return render_template('new_url_return.html', short_url_hash=short_url_hash)
+
     else:
         return 'EMPTY REQUEST'
 
