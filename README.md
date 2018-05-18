@@ -1,6 +1,7 @@
 # MyTinyURL
 Flask URL Shortener
 
+Make a copy of the `secrets-sample.py` file and call it `secrets.py`, then fill it in with your info.
 
 *DB Schema:*
 ```
@@ -10,6 +11,7 @@ CREATE TABLE `url_map` (
   `full_url_hash` varchar(255) NOT NULL,
   `short_url_hash` varchar(255) NOT NULL,
   `url` varchar(255) NOT NULL,
+  `visits` int(11) DEFAULT 0,
   PRIMARY KEY (`url_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1
 ```
