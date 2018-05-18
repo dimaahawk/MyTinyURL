@@ -32,7 +32,7 @@ def is_linux_or_mac():
 def get_db_cursor_obj():
     if is_linux_or_mac() == 'linux':
         local_db_connection = MySQLdb.connect(host='localhost', user=secrets.LOCALHOST_DB['mytinyurl_user']
-                                              , passwd=secrets.LOCALHOST_DB['mytinyurl_password'], db='mytinyurl')
+                                              , passwd=secrets.LOCALHOST_DB['mytinyurl_password'], db=secrets.LOCALHOST_DB['mytinyurl_db'])
     else:
         local_db_connection = MySQLdb.connect(host='localhost', user='root'
                                               , passwd='', db='mytinyurl')

@@ -52,19 +52,5 @@ def url_lookup(short_url_hash):
         return redirect(redirect_url, code=302)
 
 
-@app.route('/foo/', methods=['GET', 'POST'])
-def foo():
-    headers, cookies = request.headers, request.cookies
-    # logger.info('Headers: {0}'.format(headers))
-    logger.info('Cookies: {0}'.format(cookies))
-    resp = make_response('HELLO WORLD!')
-    # resp = make_response(render_template('new_url_return.html', short_url_hash='foobar'))
-    resp.set_cookie('urluid', value='testing01')
-    resp.set_cookie('sessId', value='abc')
-    resp.headers['X-HELLO'] = 'monkey'
-
-    return resp
-
-
 if __name__ == '__main__':
     app.run(debug=True)
