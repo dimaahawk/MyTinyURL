@@ -10,3 +10,9 @@ select url
 from url_map
 where short_url_hash = '{0}'
 '''
+
+update_visits_by_short_hash = '''
+update url_map
+set visits = visits + 1
+where short_url_hash = '{0}'
+'''
