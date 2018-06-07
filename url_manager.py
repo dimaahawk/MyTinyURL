@@ -144,7 +144,7 @@ class UrlManager(object):
         else:
             return False
 
-
-
-    def get_url_by_short_hash(self):
-        pass
+    def get_url_by_short_hash(self, short_url_hash):
+        with DbHandler() as db:
+            return_url = db.get_url_from_short_hash(short_url_hash)
+        return return_url
