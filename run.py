@@ -1,12 +1,14 @@
 import logging
 import url_manager
-from flask import Flask, redirect, request, render_template, make_response
+from flask import Flask, redirect, request, render_template, make_response, abort
 
 logging.basicConfig(format='[%(asctime)s]:[%(levelname)s]:[%(filename)s %(lineno)d]:[%(funcName)s]:%(message)s')
 logger = logging.getLogger('run')
 logger.setLevel(logging.DEBUG)
 
 app = Flask(__name__)
+
+url_manager = url_manager.UrlManager()
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -21,20 +23,33 @@ def page_not_found():
 
 @app.route('/add/', methods=['POST'])
 def add_url():
-    input_url = request.form['input_url']
-    if input_url:
-        logger.info('Params: {0}'.format(input_url))
-        short_url_hash = url_manager.new_url_handler(input_url)
+    incoming_url = request.form['input_url'] if request.form.get('input_url') else False
+    if incoming_url:
+        short_url_hash = url_manager.put_new_url(request)
         if short_url_hash:
             return render_template('new_url_return.html', short_url_hash=short_url_hash)
         else:
-            return_line = '''
-            You entered an invalid url, please ensure you enter a FULL URL
-            Example: http://google.com
-            '''
-            return return_line
+            return '''You likely entered an invalid url: {0}
+            ensure you use a full url
+            Example: http://google.com'''.format(request.form['input_url'])
     else:
-        return 'EMPTY REQUEST'
+        abort(400)
+
+    return 'test'
+    # input_url = request.form['input_url']
+    # if input_url:
+    #     logger.info('Params: {0}'.format(input_url))
+    #     short_url_hash = url_manager.new_url_handler(input_url)
+    #     if short_url_hash:
+    #         return render_template('new_url_return.html', short_url_hash=short_url_hash)
+    #     else:
+    #         return_line = '''
+    #         You entered an invalid url, please ensure you enter a FULL URL
+    #         Example: http://google.com
+    #         '''
+    #         return return_line
+    # else:
+    #     return 'EMPTY REQUEST'
 
 
 @app.route('/s/')

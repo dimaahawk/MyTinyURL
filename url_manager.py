@@ -4,6 +4,7 @@ import MySQLdb
 import hashlib
 import _mysql_exceptions
 import url_shortener_queries
+from db_handler import DbHandler
 
 try:
     import secrets
@@ -109,3 +110,41 @@ def return_url_from_short_hash(short_url_hash):
         logger.info('URL is: {0}'.format(return_url))
 
     return return_url
+
+
+class UrlManager(object):
+
+    def __init__(self):
+        pass
+
+    def hash_url(self, url):
+        url = url.strip()
+        full_url_hash = hashlib.sha256(url).hexdigest()
+        short_url_hash = full_url_hash[len(full_url_hash) - 10:]  # Get the last 10 characters from the hash
+        return_tuple = (full_url_hash, short_url_hash, url)
+        return return_tuple
+
+    def is_url_valid(self, url):
+        if url.startswith('http://') or url.startswith('https://'):
+            return True
+        else:
+            return False
+
+    def put_new_url(self, incoming_request):
+        incoming_url = incoming_request.form['input_url']
+        if self.is_url_valid(incoming_url):
+            ua = incoming_request.headers['User-Agent']
+            ip = incoming_request.remote_addr
+            full_hash, short_hash, url = self.hash_url(incoming_url)
+
+            with DbHandler() as db:
+                db.insert_new_short_url(full_hash, short_hash, url, ip, ua)
+            return short_hash
+
+        else:
+            return False
+
+
+
+    def get_url_by_short_hash(self):
+        pass
