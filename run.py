@@ -40,6 +40,7 @@ def add_url():
 def empty_lookup():
     return redirect(url_for('root'))
 
+
 @app.route('/s/<string:short_url_hash>/')
 def url_lookup(short_url_hash):
     redirect_url = url_manager.get_url_by_short_hash(short_url_hash)
@@ -48,12 +49,6 @@ def url_lookup(short_url_hash):
         return 'URL NOT FOUND'
     else:
         return redirect(redirect_url, code=302)
-    # redirect_url = url_manager.return_url_from_short_hash(short_url_hash)
-    # logger.info('Sending back: {0}'.format(redirect_url))
-    # if not redirect_url:
-    #     return 'INVALID LOOKUP'
-    # else:
-    #     return redirect(redirect_url, code=302)
 
 
 @app.route('/foo/', methods=['GET', 'POST'])
@@ -63,7 +58,6 @@ def foo():
     headers, cookies = request.headers, request.cookies
     logger.info('Cookies: {0}'.format(cookies))
     resp = make_response('HELLO WORLD!')
-    # resp = make_response(render_template('new_url_return.html', short_url_hash='foobar'))
     resp.set_cookie('urluid', value=random_cookie)
     resp.headers['X-HELLO'] = 'monkey'
     return resp

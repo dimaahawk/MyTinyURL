@@ -12,17 +12,16 @@ logging.basicConfig(format='[%(asctime)s]:[%(levelname)s]:[%(filename)s %(lineno
 logger = logging.getLogger('db_handler')
 logger.setLevel(logging.DEBUG)
 
-HOST = 'localhost'
-USER = secrets.LOCALHOST_DB['mytinyurl_user']
-PASSWORD = secrets.LOCALHOST_DB['mytinyurl_password']
-DB = secrets.LOCALHOST_DB['mytinyurl_db']
-TABLE = secrets.LOCALHOST_DB['mytinyurl_table']
-
 
 class DbHandler(object):
 
     def __init__(self):
-        self.conn = MySQLdb.connect(host=HOST, user=USER, passwd=PASSWORD, db=DB)
+        self.host = 'localhost'
+        self.user = secrets.LOCALHOST_DB['mytinyurl_user']
+        self.password = secrets.LOCALHOST_DB['mytinyurl_password']
+        self.db = secrets.LOCALHOST_DB['mytinyurl_db']
+        self.table = secrets.LOCALHOST_DB['mytinyurl_table']
+        self.conn = MySQLdb.connect(host=self.host, user=self.user, passwd=self.password, db=self.db)
         self.cur = self.conn.cursor()
 
     def __enter__(self):
@@ -45,14 +44,14 @@ class DbHandler(object):
         logger.info('Running Query: {0}'.format(sql_query))
 
     def insert_new_short_url(self, full_hash, short_hash, url, ip_address, user_agent):
-        query = url_shortener_queries.insert_new_url.format(full_hash, short_hash, url, ip_address, user_agent)
+        query = url_shortener_queries.insert_new_url.format(self.table, full_hash, short_hash, url, ip_address, user_agent)
         logger.info('Running Query: {0}'.format(query))
         self.cur.execute(query)
         self.conn.commit()
         return True
 
     def get_url_from_short_hash(self, short_url_hash):
-        query = url_shortener_queries.get_url.format(short_url_hash)
+        query = url_shortener_queries.get_url.format(self.table, short_url_hash)
         logger.info('Running Query: {0}'.format(query))
         self.cur.execute(query)
         query_results = self.cur.fetchall()
@@ -67,7 +66,7 @@ class DbHandler(object):
         return return_url
 
     def increment_visit_by_short_hash(self, short_url_hash):
-        query = url_shortener_queries.update_visits_by_short_hash.format(short_url_hash)
+        query = url_shortener_queries.update_visits_by_short_hash.format(self.table, short_url_hash)
         logger.info('Running Query: {0}'.format(query))
         self.cur.execute(query)
         self.conn.commit()
