@@ -7,7 +7,6 @@ logger = logging.getLogger('run')
 logger.setLevel(logging.DEBUG)
 
 app = Flask(__name__)
-
 url_manager = url_manager.UrlManager()
 
 
@@ -21,17 +20,19 @@ def page_not_found():
     return '404'
 
 
-@app.route('/add/', methods=['POST'])
+@app.route('/add', methods=['POST'])
 def add_url():
     incoming_url = request.form['input_url'] if request.form.get('input_url') else False
     if incoming_url:
         short_url_hash = url_manager.put_new_url(request)
         if short_url_hash:
-            return render_template('new_url_return.html', short_url_hash=short_url_hash)
+            # return render_template('new_url_return.html', short_url_hash=short_url_hash)
+            # return json.dumps({'success': 'true', 'resp': short_url_hash})
+            return short_url_hash
         else:
-            return '''You likely entered an invalid url: {0}
+            return ('''You likely entered an invalid url: {0}
             ensure you use a full url
-            Example: http://google.com'''.format(request.form['input_url'])
+            Example: http://google.com'''.format(request.form['input_url']), 400)
     else:
         abort(400)
 
@@ -64,4 +65,4 @@ def foo():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8888)

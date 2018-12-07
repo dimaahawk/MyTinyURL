@@ -9,6 +9,7 @@ get_url = '''
 select url
 from {0}
 where short_url_hash = '{1}'
+limit 1
 '''
 
 update_visits_by_short_hash = '''

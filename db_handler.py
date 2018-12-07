@@ -44,10 +44,24 @@ class DbHandler(object):
         logger.info('Running Query: {0}'.format(sql_query))
 
     def insert_new_short_url(self, full_hash, short_hash, url, ip_address, user_agent):
+
+        if self.get_url_from_short_hash(short_hash):
+            logger.info('URL exists already... returning short hash: {}'.format(short_hash))
+            return True
+
         query = url_shortener_queries.insert_new_url.format(self.table, full_hash, short_hash, url, ip_address, user_agent)
         logger.info('Running Query: {0}'.format(query))
         self.cur.execute(query)
         self.conn.commit()
+
+        return True
+
+    def increment_visit_by_short_hash(self, short_url_hash):
+        query = url_shortener_queries.update_visits_by_short_hash.format(self.table, short_url_hash)
+        logger.info('Running Query: {0}'.format(query))
+        self.cur.execute(query)
+        self.conn.commit()
+
         return True
 
     def get_url_from_short_hash(self, short_url_hash):
@@ -64,10 +78,3 @@ class DbHandler(object):
             logger.info('URL is: {0}'.format(return_url))
 
         return return_url
-
-    def increment_visit_by_short_hash(self, short_url_hash):
-        query = url_shortener_queries.update_visits_by_short_hash.format(self.table, short_url_hash)
-        logger.info('Running Query: {0}'.format(query))
-        self.cur.execute(query)
-        self.conn.commit()
-        return True
