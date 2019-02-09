@@ -5,7 +5,7 @@ from db_handler import DbHandler
 try:
     import secrets
 except ImportError as e:
-    print 'no secrets.py was found, please ensure you have the file present in the project root directory.\n'
+    print('no secrets.py was found, please ensure you have the file present in the project root directory.\n')
 
 logging.basicConfig(format='[%(asctime)s]:[%(levelname)s]:[%(filename)s %(lineno)d]:[%(funcName)s]:%(message)s')
 logger = logging.getLogger('url_manager')
