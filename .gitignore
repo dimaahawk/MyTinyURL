@@ -1,4 +1,7 @@
-*.pyc
+**.pyc
+**__pycache__
 .DS_Store
 .idea/
-secrets.py
+venv/
+.vscode/
+env_37
